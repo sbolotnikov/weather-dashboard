@@ -1,0 +1,16 @@
+header
+{
+   text-align: center;
+   color: bisque;
+   background-color: darkslategray;
+   padding: 2rem, 1rem;
+   margin-bottom: 1rem;
+}
+
+@media (min-width: 576px)
+{
+   header
+   {
+      padding: 1rem 0.5rem;
+   }
+}
