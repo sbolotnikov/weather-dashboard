@@ -1,10 +1,103 @@
+div.container
+{
+   margin: 0;
+   padding: 0;
+}
+
 header
 {
    text-align: center;
-   color: bisque;
-   background-color: darkslategray;
+   color: #fbfdfe;
+   background-color: #343a40;
    padding: 2rem, 1rem;
-   margin-bottom: 1rem;
+   margin-bottom: 0;
+   
+}
+div.col-2
+{
+   background-color: royalblue;
+   color: whitesmoke;
+   text-align: left;
+   border-radius: 3px;
+
+
+}
+#uv
+{
+  border-radius: .2rem;
+  color:white;
+  padding: .5rem; 
+}
+.futureData
+{
+   font-size: 13px;
+}
+.date
+{
+   font-size: 18px;
+   font-weight: bold  ;
+}
+#currentPan
+{
+   border-radius: .2rem;
+   border: 1px solid lightgray;
+   padding: 5px;
+   margin: 15px;
+}
+h5.forPan
+{
+ margin-left:15px;
+}
+
+.col-3
+{
+   background-color: whitesmoke;
+   padding-left: 28px;
+   padding-top: 10px;
+}
+#city-input
+{
+   margin-bottom: 10px;
+}
+#add-city
+{
+      background: no-repeat center/100% url(../search-icon.png) ;
+      width: 35px;
+      height: 35px;
+      border: 0px;
+      align-items: center;
+      box-shadow: 10px;
+     
+}
+.btn-group
+{
+   display: block;
+}
+
+.btn-group .button {
+   background-color: rgb(255, 255, 255);
+   border: .5px solid gray;
+   padding: 10px 10px;
+   text-align: center;
+   text-decoration: none;
+   width: 95%;
+   cursor: pointer;
+ }
+ 
+ .btn-group .button:not(:last-child) {
+   border-bottom: none; /* Prevent double borders */
+ }
+ 
+ .btn-group .button:hover {
+   background-color: lightsteelblue;
+ }
+
+
+.col-9
+{
+   padding-right: 5px;
+    padding-left: 0px;
+    /* display:none; */
 }
 
 @media (min-width: 576px)

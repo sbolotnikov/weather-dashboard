@@ -8,14 +8,15 @@
     <meta name="Description" content="weather forecast app" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <title>Weather Dashboard</title>
     <script src="assets/js/main.js" defer></script>;
     <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 
 <body>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
@@ -30,40 +31,80 @@
             <section>
                 <div class="row">
                     <div class="col-3">
-                        <h4>Search for a city</h4>
+                        <form id="city-form">
+                            <h5>Search for a city:</h5>
+                            <input type="text" id="city-input">
+
+                            <!-- Button triggers new cities to be added -->
+                            <input id="add-city" type="submit" value=" " src="/assets/search-icon.png">
+                        </form>
+                        <div class="btn-group"></div>
+
 
 
                     </div>
-                    <!-- <div class="col-9 col-sm-12 col-md-7 col-lg-7"></div> -->
                     <div class="col-9">
                         <figure id="currentPan">
-                            <h2>Curent conditions</h2>
-                        </figure>
-                        <figure class="5DayForPan">
-                            <h3>5-Day Forcast</h3>
-                            <div class="row">
-                                <div class="col-0 col-sm-1">
-                                    
-                                </div>
-                                <div class="col-12 col-sm-2">
-                                    <h6>Day1</h6>
-                                </div>
-                                <div class="col-12 col-sm-2 ">
-                                    <h6>Day2</h6>
-                                </div>
-                                <div class="col-12  col-sm-2">
-                                    <h6>Day3</h6>
-                                </div>
-                                <div class="col-12  col-sm-2">
-                                    <h6>Day4</h6>
 
+                            <h2 id="cityName"></h2>
+                            <h2 id="todayDate"></h2>
+                            <p id="weather"></p>
+                            <img id="cloudIcon" alt="Current Cloud coverage" width="100" height="100">
+                            <p id="curtemp"></p>
+                            <p id="tempH"></p>
+                            <p id="tempL"></p>
+                            <p id="tempH"></p>
+                            <p id="weather"></p>
+                            <p id="humidity"></p>
+                            <p id="wind"></p>
+                            <p id="ultraViolet">UV Index: <span id="uv"></span></p>
+                        </figure>
+                        <h5 class="forPan">5-Day Forcast</h5>
+
+                            <div class="row ml-1 justify-content-around">
+                                <div class="col-2">
+                                    <p class="date" id="date_1"></p>
+                                    <p class="futureData" id="tempH_1"></p>
+                                    <p class="futureData" id="tempL_1"></p>
+                                    <p class="futureData" id="weather_1"></p>
+                                    <img id="cloudIcon_1" alt="Cloud coverage day 1">
+                                    <p class="futureData" id="humidity_1"></p>
                                 </div>
-                                <div class="col-12  col-sm-2">
-                                    <h6>Day5</h6>
+                                <div class="col-2">
+                                    <p class="date" id="date_2"></p>
+                                    <p class="futureData" id="tempH_2"></p>
+                                    <p class="futureData" id="tempL_2"></p>
+                                    <p class="futureData" id="weather_2"></p>
+                                    <img id="cloudIcon_2" alt="Cloud coverage day 2">
+                                    <p class="futureData" id="humidity_2"></p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="date" id="date_3"></p>
+                                    <p class="futureData" id="tempH_3"></p>
+                                    <p class="futureData" id="tempL_3"></p>
+                                    <p class="futureData" id="weather_3"></p>
+                                    <img id="cloudIcon_3" alt="Cloud coverage day 3">
+                                    <p class="futureData" id="humidity_3"></p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="date" class="date" id="date_4"></p>
+                                    <p class="futureData" id="tempH_4"></p>
+                                    <p class="futureData" id="tempL_4"></p>
+                                    <p class="futureData" id="weather_4"></p>
+                                    <img id="cloudIcon_4" alt="Cloud coverage day 4">
+                                    <p class="futureData" id="humidity_4"></p>
+                                </div>
+                                <div class="col-2">
+                                    <p class="date" id="date_5"></p>
+                                    <p class="futureData" id="tempH_5"></p>
+                                    <p class="futureData" id="tempL_5"></p>
+                                    <p class="futureData" id="weather_5"></p>
+                                    <img id="cloudIcon_5" alt="Cloud coverage day 5">
+                                    <p class="futureData" id="humidity_5"></p>
                                 </div>
 
                             </div>
-                        </figure>
+                        
 
                     </div>
                 </div>
