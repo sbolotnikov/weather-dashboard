@@ -97,7 +97,7 @@ h5.forPan
 {
    padding-right: 5px;
     padding-left: 0px;
-    /* display:none; */
+    opacity: 0;
 }
 
 @media (min-width: 576px)

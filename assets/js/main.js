@@ -94,8 +94,7 @@ function weatherConditions(coord) {
     url: queryURL,
     method: "GET",
   }).then(function (response) {
-    console.log(JSON.stringify(response));
-    console.log(coord);
+    $(".col-9").css("opacity", 1);
     $("#todayDate").text(moment().format("dddd LL"));
     $("#cityName").text(coord.name);
     cloudIconURL = "https://openweathermap.org/img/w/" + response.current.weather[0].icon + ".png";
@@ -132,7 +131,6 @@ $("#add-city").on("click", function (event) {
    
     cityInfo.lat = response.coord.lat;
     cityInfo.lon = response.coord.lon;
-    // $(".col-9").attr("display", "flex");
     var a = $("<button>");
     // Adding a class of city to our button
     a.addClass("button");
@@ -144,7 +142,6 @@ $("#add-city").on("click", function (event) {
     // Adding the button to the btn-group div
     $(".btn-group").prepend(a);
     weatherConditions(cityInfo); 
-    console.log(cityInfo);
   });
   
 });
