@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <!-- adding leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
     <title>Weather Dashboard</title>
     <script src="assets/js/main.js" defer></script>;
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -19,6 +23,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
 
     <div class="container">
         <main>
@@ -39,72 +47,16 @@
                             <input id="add-city" type="submit" value=" " src="/assets/search-icon.png">
                         </form>
                         <div class="btn-group"></div>
-
-
-
                     </div>
                     <div class="col-9">
+                        <button id="system" onclick="changeSystem()">&degF</button>
                         <figure id="currentPan">
 
-                            <h2 id="cityName"></h2>
-                            <h2 id="todayDate"></h2>
-                            <p id="weather"></p>
-                            <img id="cloudIcon" alt="Current Cloud coverage" width="100" height="100">
-                            <p id="curtemp"></p>
-                            <p id="tempH"></p>
-                            <p id="tempL"></p>
-                            <p id="tempH"></p>
-                            <p id="weather"></p>
-                            <p id="humidity"></p>
-                            <p id="wind"></p>
-                            <p id="ultraViolet">UV Index: <span id="uv"></span></p>
                         </figure>
-                        <h5 class="forPan">5-Day Forcast</h5>
+                        <h5>5-Day Forcast</h5>
+                        <figure id="forPan">
 
-                            <div class="row ml-1 justify-content-around">
-                                <div class="col-2">
-                                    <p class="date" id="date_1"></p>
-                                    <p class="futureData" id="tempH_1"></p>
-                                    <p class="futureData" id="tempL_1"></p>
-                                    <p class="futureData" id="weather_1"></p>
-                                    <img id="cloudIcon_1" alt="Cloud coverage day 1">
-                                    <p class="futureData" id="humidity_1"></p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="date" id="date_2"></p>
-                                    <p class="futureData" id="tempH_2"></p>
-                                    <p class="futureData" id="tempL_2"></p>
-                                    <p class="futureData" id="weather_2"></p>
-                                    <img id="cloudIcon_2" alt="Cloud coverage day 2">
-                                    <p class="futureData" id="humidity_2"></p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="date" id="date_3"></p>
-                                    <p class="futureData" id="tempH_3"></p>
-                                    <p class="futureData" id="tempL_3"></p>
-                                    <p class="futureData" id="weather_3"></p>
-                                    <img id="cloudIcon_3" alt="Cloud coverage day 3">
-                                    <p class="futureData" id="humidity_3"></p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="date" class="date" id="date_4"></p>
-                                    <p class="futureData" id="tempH_4"></p>
-                                    <p class="futureData" id="tempL_4"></p>
-                                    <p class="futureData" id="weather_4"></p>
-                                    <img id="cloudIcon_4" alt="Cloud coverage day 4">
-                                    <p class="futureData" id="humidity_4"></p>
-                                </div>
-                                <div class="col-2">
-                                    <p class="date" id="date_5"></p>
-                                    <p class="futureData" id="tempH_5"></p>
-                                    <p class="futureData" id="tempL_5"></p>
-                                    <p class="futureData" id="weather_5"></p>
-                                    <img id="cloudIcon_5" alt="Cloud coverage day 5">
-                                    <p class="futureData" id="humidity_5"></p>
-                                </div>
-
-                            </div>
-                        
+                        </figure>
 
                     </div>
                 </div>

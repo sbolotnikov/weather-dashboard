@@ -44,11 +44,29 @@ div.col-2
    padding: 5px;
    margin: 15px;
 }
-h5.forPan
+/* Make sure the map container has a defined height, for example by setting it in CSS */
+#mapid 
 {
- margin-left:15px;
+    height: 450px;
+    width: 100%;
 }
 
+#forPan
+{
+   /* border-radius: .2rem;
+   border: 1px solid lightgray; */
+   padding-top: 5px;
+}
+.hidden
+{
+   display:none;
+}
+#system
+{
+   float: right;
+   margin-top: 15px;
+   margin-right: 15px;
+}
 .col-3
 {
    background-color: whitesmoke;

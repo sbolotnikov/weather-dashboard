@@ -16,31 +16,19 @@ function getUVIndexColor(n) {
     case n > 0 && n <= 1:
       $("#uv").css("background-color", "#41d924");
       break;
-    case n > 1 && n <= 2:
+    case n > 1 && n <= 3:
       $("#uv").css("background-color", "#afcc24");
       break;
-    case n > 2 && n <= 3:
+    case n > 3 && n <= 6:
       $("#uv").css("background-color", "#d6c422");
       break;
-    case n > 3 && n <= 4:
-      $("#uv").css("background-color", "#d29321");
-      break;
-    case n > 4 && n <= 5:
-      $("#uv").css("background-color", "#d16b20");
-      break;
-    case n > 5 && n <= 6:
+    case n > 6 && n <= 8:
       $("#uv").css("background-color", "#cc4620");
       break;
-    case n > 6 && n <= 7:
-      $("#uv").css("background-color", "#c9071f");
-      break;
-    case n > 7 && n <= 8:
+    case n > 8 && n <= 10:
       $("#uv").css("background-color", "#bd071e");
       break;
-    case n > 8 && n <= 9:
-      $("#uv").css("background-color", "#cd0065");
-      break;
-    case n > 9:
+    case n > 10:
       $("#uv").css("background-color", "#cd008d");
       break;
     default:
@@ -87,7 +75,23 @@ function getWindDir(deg) {
       return "No Wind";
   }
 }
+function changeSystem(){
+ let s=$("#system").text();
+ if (s==="\xB0F"){
+   $("#imp1").attr("class","hidden");
+   $("#imp2").attr("class","hidden");
+   $("#metr1").attr("class","");
+   $("#metr2").attr("class","container");
+   $("#system").text("\xB0C");
+ }else{
+   $("#imp1").attr("class","");
+   $("#imp2").attr("class","container");
+   $("#metr1").attr("class","hidden");
+   $("#metr2").attr("class","hidden");
+  $("#system").text("\xB0F");
 
+ }
+};
 function weatherConditions(coord) {
   var queryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${coord.lat}&lon=${coord.lon}&units=imperial&exclude=minutely,hourly&appid=${apikey}`;
   $.ajax({
@@ -95,28 +99,97 @@ function weatherConditions(coord) {
     method: "GET",
   }).then(function (response) {
     $(".col-9").css("opacity", 1);
-    $("#todayDate").text(moment().format("dddd LL"));
-    $("#cityName").text(coord.name);
-    cloudIconURL = "https://openweathermap.org/img/w/" + response.current.weather[0].icon + ".png";
-    $("#cloudIcon").attr("src", cloudIconURL);
-    $("#weather").text("Current conditions: " + response.current.weather[0].main);
-    $("#curtemp").text("Temperature: " + Math.floor(response.current.temp) + "\xB0F");
-    $("#tempH").text("High: " + Math.floor(response.daily[0].temp.max) + "\xB0F");
-    $("#tempL").text("Low: " + Math.floor(response.daily[0].temp.min) + "\xB0F");
-    $("#humidity").text("Humidity: " + response.current.humidity + "%");
-    $("#wind").text("Wind: " + getWindDir(response.current.wind_deg) + response.current.wind_speed + " mph");
-    $("#uv").text(response.current.uvi);
+
+
+
+    let el = `<h2 id="cityName">${coord.name}</h2>
+<h2 id="todayDate">${moment().format("dddd LL")}</h2>
+<div class="row">
+  <div class="col-4">
+    <h3 id="weather">Current conditions: ${response.current.weather[0].description}</h3>
+    <img id="cloudIcon" src="https://openweathermap.org/img/w/${response.current.weather[0].icon}.png" alt="Current Cloud coverage" width="150" height="150">
+    <figure id="imp1">
+      <p class="curtemp">Temperature${Math.round(response.current.temp)} \xB0F</p>
+      <p class="tempFeel">Feels like: ${Math.round(response.current.feels_like)} \xB0F</p>
+      <p class="tempH">High: ${Math.round(response.daily[0].temp.max)} \xB0F</p>
+      <p class="tempL">Low:${Math.round(response.daily[0].temp.min)} \xB0F </p>
+      <p class="wind">Wind: ${getWindDir(response.current.wind_deg)}${response.current.wind_speed}mph</p>
+    </figure>
+    <figure class="hidden" id="metr1">
+      <p class="curtemp">Temperature${Math.round((response.current.temp - 32) * 5 / 9)} \xB0C</p>
+      <p class="tempFeel">Feels like: ${Math.round((response.current.feels_like - 32) * 5 / 9)} \xB0C</p>
+      <p class="tempH">High: ${Math.round((response.daily[0].temp.max - 32) * 5 / 9)} \xB0C</p>
+      <p class="tempL">Low:${Math.round((response.daily[0].temp.min - 32) * 5 / 9)} \xB0C </p>
+      <p class="wind">Wind: ${getWindDir(response.current.wind_deg)}${(response.current.wind_speed / 2.237).toFixed(2)}m/s</p>
+    </figure>
+    <p id="humidity">Humidity: ${response.current.humidity} %</p>
+    <p id="ultraViolet">UV Index: <span id="uv">${response.current.uvi}</span></p>
+  </div>
+  <div class="col-8">
+     <div id="mapid"></div>
+     </div>
+  </div>
+</div>`
+    let $currentEl = document.createElement('div');
+    $currentEl.innerHTML = el;
+    // $currentEl = $currentEl.firstElementChild;
+    $("#currentPan").empty()
+    $("#currentPan").append($currentEl)
     getUVIndexColor(response.current.uvi);
+    // adding map
+    const mymap = L.map('mapid').setView([coord.lat,coord.lon], 13);
+    const attribution = 
+    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+    const tileURL='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    const tiles = L.tileLayer(tileURL,{attribution});
+    tiles.addTo(mymap);
+    L.marker([coord.lat,coord.lon]).addTo(mymap);
+
+
+
+
+    el = `<div id="imp2">
+           <div class="row ml-1 justify-content-around">           
+    `
+    let elM = `<div class="hidden" id="metr2">
+                <div class="row ml-1 justify-content-around">               
+    `
     for (var i = 1; i < 6; i++) {
-      $("#date_" + i).text(moment().add(i, 'd').format('MM/DD/YYYY'));
-      $("#tempH_" + i).text("High: " + response.daily[i].temp.max.toFixed(0) + "\xB0F");
-      $("#tempL_" + i).text("Low: " + response.daily[i].temp.min.toFixed(0) + "\xB0F");
-      $("#weather_" + i).text(response.daily[i].weather[0].main);
-      $("#cloudIcon_" + i).attr("src", "https://openweathermap.org/img/w/" + response.daily[i].weather[0].icon + ".png");
-      $("#humidity_" + i).text("Humid. : " + response.daily[i].humidity + "%");
+
+      el +=
+        ` <div class="col-2">
+           <p class="date">${moment().add(i, 'd').format('MM/DD/YYYY')}</p>
+           <p class="futureData">High: ${response.daily[i].temp.max.toFixed(0)}\xB0F</p>
+           <p class="futureData">Low: ${response.daily[i].temp.min.toFixed(0)}\xB0F</p>
+           <p class="futureData">${response.daily[i].weather[0].main}</p>
+           <img id="cloudIcon_1" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
+           <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
+          </div>`
+      elM +=
+        `
+          <div class="col-2">
+           <p class="date">${moment().add(i, 'd').format('MM/DD/YYYY')}</p>
+           <p class="futureData">High: ${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</p>
+           <p class="futureData">Low: ${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</p>
+           <p class="futureData">${response.daily[i].weather[0].main}</p>
+           <img id="cloudIcon_1" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
+           <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
+          </div>`
     }
+    el+="</div> </div>";
+    $currentEl = document.createElement('div');
+    $currentEl.innerHTML = el;
+      // $currentEl = $currentEl.firstElementChild;
+    $("#forPan").empty();    
+    $("#forPan").append($currentEl);
+    el+="</div> </div>";
+    $currentEl = document.createElement('div');
+    $currentEl.innerHTML = elM;
+      // $currentEl = $currentEl.firstElementChild;    
+    $("#forPan").append($currentEl)
   });
-  
+
+
 };
 // This function handles events where one button is clicked
 $("#add-city").on("click", function (event) {
@@ -128,32 +201,36 @@ $("#add-city").on("click", function (event) {
     url: locatequeryURL,
     method: "GET",
   }).then(function (response) {
-   
+
     cityInfo.lat = response.coord.lat;
     cityInfo.lon = response.coord.lon;
     var a = $("<button>");
     // Adding a class of city to our button
     a.addClass("button");
     // Adding a data-attribute
-    a.attr("data-name",cityInfo.lat+","+cityInfo.lon);
+    a.attr("data-name", cityInfo.lat + "," + cityInfo.lon);
     // Providing the initial button text
     a.text(cityInfo.name);
 
     // Adding the button to the btn-group div
     $(".btn-group").prepend(a);
-    weatherConditions(cityInfo); 
+    weatherConditions(cityInfo);
+  }).catch(function (error) {
+    if (error.status===404){
+    alert(`uh-oh! Looks like you formatted your city name incorrectly or that city does not exist. \n\n For example: \n ❤️ correct: new york,usa \n ✖️ incorrect: new york,ny`);
+    }
   });
-  
+
 });
 
 // function for displaying the weatherConditions after clicking to button
 $(document).on("click", ".btn-group", function (event) {
   var coor = $(event.target).attr("data-name");
   var pos = coor.search(",");
-  cityInfo.lat=coor.slice(0,pos);
-  cityInfo.lon=coor.slice(pos+1);
-  cityInfo.name=$(event.target).text()
- 
+  cityInfo.lat = coor.slice(0, pos);
+  cityInfo.lon = coor.slice(pos + 1);
+  cityInfo.name = $(event.target).text()
+
   weatherConditions(cityInfo);
 });
 
