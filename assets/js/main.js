@@ -178,8 +178,11 @@ function weatherConditions(coord) {
       imgURL=response1.value[0].contentUrl;
       document.body.style.backgroundImage = `url("${imgURL}")`;
       console.log(imgURL);
-    });
-    console.log(imgURL);
+    }).catch(function (error) {
+      // if error use default
+      document.body.style.backgroundImage = `url("${imgURL}")`;
+    }
+    );
     // cloudy.jpg
     document.body.style.backgroundRepeat = "y-repeat";
     document.body.style.backgroundSize = "100%";

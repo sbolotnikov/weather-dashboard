@@ -30,7 +30,7 @@ THEN I am presented with the last searched city forecast
 
 The following image demonstrates needed the application functionality:
 
-![weather dashboard demo](/assets/06-server-side-homework-demo.png)
+![weather dashboard demo](/assets/06-server-side-demo.png)
 
 ## Review
 ![weather dashboard demo](/assets/presentation.gif)
