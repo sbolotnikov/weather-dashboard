@@ -4,6 +4,7 @@ var lon = 0;
 var lat = 0;
 var city = "New York,NY,USA";
 var cities = [];
+var imgURL='cloudy.jpg';
 var cityInfo = {
   "name": "",
   "lat": 0,
@@ -11,6 +12,7 @@ var cityInfo = {
 };
 var cloudIconURL = "https://openweathermap.org/img/w/";
 var queryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=40.73&lon=-73.99&units=imperial&exclude=minutely,hourly&appid=${apikey}`;
+// function setting apropriate color to UV index
 function getUVIndexColor(n) {
   switch (true) {
     case n > 0 && n <= 1:
@@ -33,10 +35,9 @@ function getUVIndexColor(n) {
       break;
     default:
       break;
-
   }
-
 }
+// function translates wind direction degree to normal directions
 function getWindDir(deg) {
   switch (true) {
     case deg < 11.25 || deg >= 348.75:
@@ -74,50 +75,134 @@ function getWindDir(deg) {
     default:
       return "No Wind";
   }
-}
-function changeSystem(){
- let s=$("#system").text();
- if (s==="\xB0F"){
-   $("#imp1").attr("class","hidden");
-   $("#imp2").attr("class","hidden");
-   $("#metr1").attr("class","");
-   $("#metr2").attr("class","container");
-   $("#system").text("\xB0C");
- }else{
-   $("#imp1").attr("class","");
-   $("#imp2").attr("class","container");
-   $("#metr1").attr("class","hidden");
-   $("#metr2").attr("class","hidden");
-  $("#system").text("\xB0F");
-
- }
 };
+// storing cities in Local Storage
+function storeCities() {
+  // Stringify and send cities in localStorage 
+  localStorage.setItem("cities", JSON.stringify(cities));
+}
+// pulling the coppy of the preset cities from Local storage
+function citiesFromStorage() {
+  // retrive cities from storage
+  var storedResults = JSON.parse(localStorage.getItem("cities"));
+  // If  were retrieved from localStorage, update cities array it
+  if (storedResults !== null) {
+    cities = storedResults;
+  }
+
+}
+// change Farengeit to Celcius and back
+function changeSystem() {
+  let s = $("#system").text();
+  if (s === "\xB0F") {
+    $("#imp1").attr("class", "hidden");
+    $("#imp2").attr("class", "hidden");
+    $("#metr1").attr("class", "");
+    $("#metr2").attr("class", "");
+    $("#system").text("\xB0C");
+  } else {
+    $("#imp1").attr("class", "");
+    $("#imp2").attr("class", "");
+    $("#metr1").attr("class", "hidden");
+    $("#metr2").attr("class", "hidden");
+    $("#system").text("\xB0F");
+  }
+};
+
+// using leaflet API and openstreetmap tiles drawing the map of the location and adds layers
+//  of diffrent weather information from openweathermap API maps 1.0
+function ChangeMap(n, lat, lon) {
+  let choice;
+  if (n === 1) {
+    choice = $("#layer").val();
+  } else {
+    choice = "precipitation_new";
+  }
+  $("#mapDiv").html('');
+  $("#mapDiv").append('<div id="mapid"></div>');
+  const myzoom = 13;
+  const mymap = L.map('mapid').setView([lat, lon], myzoom);
+  const attribution =
+    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+  const tileURL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+  const tiles = L.tileLayer(tileURL, { attribution });
+  tiles.addTo(mymap);
+  L.marker([lat, lon]).addTo(mymap);
+  let mapURL = `https://tile.openweathermap.org/map/${choice}/{z}/{x}/{y}.png?appid=${apikey}`
+  const attribution1 =
+    '&copy; <a href="http://www.openweathermap.org/copyright">OpenWeatherMap</a> contributors';
+  const tileRain = L.tileLayer(mapURL, { attribution });
+  tileRain.addTo(mymap);
+}
+// displaying the cities 
+function drawCities() {
+  citiesFromStorage();
+  $(".cities-group").html("");
+  for (var i = 0; i < cities.length; i++) {
+    var a = $("<div class='row' style='width:100%'>");
+    a.append(`<div class="col-10"><figure class="city_clk" id="city_${cities.length}">${cities[i].name}</figure></div>`);
+    // adds delete button for every appointment
+    a.append('<div class="col-2" style="padding:0"><button class="smBtn" id="smBtn' + i + '">&times;</button></div>');
+    // Adding the button to the btn-group div
+    $(".cities-group").prepend(a);
+    // Adding a data-attribute
+    $("#city_" + cities.length).attr("data-name", cities[i].lat + "," + cities[i].lon);
+  }
+}
+// accordingly to the coordinates take information from openweathermap API
 function weatherConditions(coord) {
   var queryURL = `https://api.openweathermap.org/data/2.5/onecall?lat=${coord.lat}&lon=${coord.lon}&units=imperial&exclude=minutely,hourly&appid=${apikey}`;
   $.ajax({
     url: queryURL,
     method: "GET",
   }).then(function (response) {
-    $(".col-9").css("opacity", 1);
+    $("#bigPan3").css("opacity", 1);
+    // https://openweathermap.org/img/w/50d.png
+    // '01d''01n','02d''02n''03d''03n''04d''04n'    '09d''09n'   '10d''10n'   '11d''11n'   '13d''13n'   '50d''50n' fog
 
 
 
-    let el = `<h2 id="cityName">${coord.name}</h2>
-<h2 id="todayDate">${moment().format("dddd LL")}</h2>
-<div class="row">
-  <div class="col-4">
-    <h3 id="weather">Current conditions: ${response.current.weather[0].description}</h3>
-    <img id="cloudIcon" src="https://openweathermap.org/img/w/${response.current.weather[0].icon}.png" alt="Current Cloud coverage" width="150" height="150">
+    // if sucsessfull it find image for the background accordingly to current weather conditions from rapidapi API
+    var settings = {
+      "async": true,
+      "crossDomain": true,
+      "url": `https://bing-image-search1.p.rapidapi.com/images/search?q=${response.current.weather[0].description}`,
+      "method": "GET",
+      "headers": {
+        "x-rapidapi-host": "bing-image-search1.p.rapidapi.com",
+        "x-rapidapi-key": "dff8f3f117msh752eb83c0d81eb8p10add3jsn52664fe1c35d"
+      }
+    }
+    
+    $.ajax(settings).done(function (response1) {
+      imgURL=response1.value[0].contentUrl;
+      document.body.style.backgroundImage = `url("${imgURL}")`;
+      console.log(imgURL);
+    });
+    console.log(imgURL);
+    // cloudy.jpg
+    document.body.style.backgroundRepeat = "y-repeat";
+    document.body.style.backgroundSize = "100%";
+    // displaying and arranging current weather data in Farengeit and Celcious
+
+    let el = `<button class="systemBtn" id="system" onclick="changeSystem()">&degF</button>
+    <h5 class="systemBtn">Change system &degF or &degC :</h5>
+    <h2 id="cityName">${coord.name}</h2>
+<h3 id="todayDate">${moment().format("dddd LL")}</h3>
+<div class="row" id="bigPan2">
+  <div class="col-12 col-md-4">
+    <h3>Current conditions: <span id="weather">${response.current.weather[0].description}</span></h3>
+    <img id="cloudIcon" src="https://openweathermap.org/img/w/${response.current.weather[0].icon}.png" alt="Current Cloud coverage" width="100%">
     <figure id="imp1">
-      <p class="curtemp">Temperature${Math.round(response.current.temp)} \xB0F</p>
-      <p class="tempFeel">Feels like: ${Math.round(response.current.feels_like)} \xB0F</p>
+      <h5>Temperature: <span class="curtemp">${Math.round(response.current.temp)}\xB0F</span></h5>
+      <h5 class="tempFeel">Feels like: ${Math.round(response.current.feels_like)}\xB0F</h5>
       <p class="tempH">High: ${Math.round(response.daily[0].temp.max)} \xB0F</p>
       <p class="tempL">Low:${Math.round(response.daily[0].temp.min)} \xB0F </p>
       <p class="wind">Wind: ${getWindDir(response.current.wind_deg)}${response.current.wind_speed}mph</p>
     </figure>
     <figure class="hidden" id="metr1">
-      <p class="curtemp">Temperature${Math.round((response.current.temp - 32) * 5 / 9)} \xB0C</p>
-      <p class="tempFeel">Feels like: ${Math.round((response.current.feels_like - 32) * 5 / 9)} \xB0C</p>
+      <h5>Temperature: <span class="curtemp">${Math.round((response.current.temp - 32) * 5 / 9)}\xB0C</span></h5>
+      <h5 class="tempFeel">Feels like: ${Math.round((response.current.feels_like - 32) * 5 / 9)}\xB0C</h5>
       <p class="tempH">High: ${Math.round((response.daily[0].temp.max - 32) * 5 / 9)} \xB0C</p>
       <p class="tempL">Low:${Math.round((response.daily[0].temp.min - 32) * 5 / 9)} \xB0C </p>
       <p class="wind">Wind: ${getWindDir(response.current.wind_deg)}${(response.current.wind_speed / 2.237).toFixed(2)}m/s</p>
@@ -125,112 +210,119 @@ function weatherConditions(coord) {
     <p id="humidity">Humidity: ${response.current.humidity} %</p>
     <p id="ultraViolet">UV Index: <span id="uv">${response.current.uvi}</span></p>
   </div>
-  <div class="col-8">
-     <div id="mapid"></div>
+  <div class="col-12 col-md-8">
+  <label for="layer">Choose a layer:</label>
+  <select name="layer" id="layer" onchange="ChangeMap(1,${coord.lat},${coord.lon})">
+    <option value="precipitation_new">Precipitation</option>
+    <option value="clouds_new" onselect>Clouds</option>    
+    <option value="pressure_new">Sea level pressure</option>
+    <option value="wind_new">Wind speed</option>
+    <option value="temp_new">Temperature</option>
+  </select>
+     <div id="mapDiv">  
+      
+     </div>
      </div>
   </div>
 </div>`
     let $currentEl = document.createElement('div');
     $currentEl.innerHTML = el;
-    // $currentEl = $currentEl.firstElementChild;
     $("#currentPan").empty()
     $("#currentPan").append($currentEl)
     getUVIndexColor(response.current.uvi);
+    // cities from storage
+    drawCities();
     // adding map
-    const mymap = L.map('mapid').setView([coord.lat,coord.lon], 13);
-    const attribution = 
-    '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-    const tileURL='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    const tiles = L.tileLayer(tileURL,{attribution});
-    tiles.addTo(mymap);
-    L.marker([coord.lat,coord.lon]).addTo(mymap);
-
-
-
-
+    ChangeMap(0, coord.lat, coord.lon);
     el = `<div id="imp2">
-           <div class="row ml-1 justify-content-around">           
+           <div class="row justify-content-around" id="rowFor1">           
     `
     let elM = `<div class="hidden" id="metr2">
-                <div class="row ml-1 justify-content-around">               
+                <div class="row justify-content-around" id="rowFor2">               
     `
+    // displaying and arranging weather data in Farengeit and Celcious for 5 days ahead
     for (var i = 1; i < 6; i++) {
-
       el +=
-        ` <div class="col-2">
-           <p class="date">${moment().add(i, 'd').format('MM/DD/YYYY')}</p>
-           <p class="futureData">High: ${response.daily[i].temp.max.toFixed(0)}\xB0F</p>
-           <p class="futureData">Low: ${response.daily[i].temp.min.toFixed(0)}\xB0F</p>
+        ` <div class="col-4 col-md-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin:auto; border-radius: 5px">
+           <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
+           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
            <p class="futureData">${response.daily[i].weather[0].main}</p>
-           <img id="cloudIcon_1" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
+           <h6 class="futureData">High:${response.daily[i].temp.max.toFixed(0)}\xB0F</h6>
+           <h6 class="futureData">Low:${response.daily[i].temp.min.toFixed(0)}\xB0F</h6>      
            <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
           </div>`
       elM +=
         `
-          <div class="col-2">
+          <div class="col-4 col-md-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto; border-radius: 5px">         
            <p class="date">${moment().add(i, 'd').format('MM/DD/YYYY')}</p>
-           <p class="futureData">High: ${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</p>
-           <p class="futureData">Low: ${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</p>
+           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
            <p class="futureData">${response.daily[i].weather[0].main}</p>
-           <img id="cloudIcon_1" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
+           <h6 class="futureData">High:${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</h6> 
+           <h6 class="futureData">Low:${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</h6>
            <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
           </div>`
     }
-    el+="</div> </div>";
+    el += "</div> </div>";
     $currentEl = document.createElement('div');
     $currentEl.innerHTML = el;
-      // $currentEl = $currentEl.firstElementChild;
-    $("#forPan").empty();    
+    // $currentEl = $currentEl.firstElementChild;
+    $("#forPan").empty();
     $("#forPan").append($currentEl);
-    el+="</div> </div>";
+    el += "</div> </div>";
     $currentEl = document.createElement('div');
-    $currentEl.innerHTML = elM;
-      // $currentEl = $currentEl.firstElementChild;    
+    $currentEl.innerHTML = elM;    
     $("#forPan").append($currentEl)
   });
-
-
 };
-// This function handles events where one button is clicked
+// This function handles events where one button is clicked when inputing city name
 $("#add-city").on("click", function (event) {
   event.preventDefault();
   cityInfo.name = $("#city-input").val().trim();
   $("#city-input").val("");
+  // callback to openweathermap API to find coordinates of the city
   var locatequeryURL = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityInfo.name + '&appid=' + apikey;
   $.ajax({
     url: locatequeryURL,
     method: "GET",
   }).then(function (response) {
-
     cityInfo.lat = response.coord.lat;
     cityInfo.lon = response.coord.lon;
-    var a = $("<button>");
-    // Adding a class of city to our button
-    a.addClass("button");
-    // Adding a data-attribute
-    a.attr("data-name", cityInfo.lat + "," + cityInfo.lon);
-    // Providing the initial button text
-    a.text(cityInfo.name);
-
-    // Adding the button to the btn-group div
-    $(".btn-group").prepend(a);
+    // if sucsessful it add city with coordinates to LocalStorage and list of the cities on display
+    var a = $("<div class='row'>");
+    a.append(`<div class="col-10"><p class="city_clk" id="city_${cities.length}">${cityInfo.name}</p></div>`);
+    // adds delete button for every city
+    a.append('<div class="col-2"><button class="smBtn" id="smBtn' + cities.length + '">&times;</button></div>');
+    // Adding the button to the cities-group div
+    $(".cities-group").prepend(a);
+    // Adding coordinates to the data-attribute
+    $("#city_" + cities.length).attr("data-name", cityInfo.lat + "," + cityInfo.lon);
+    cities.push(cityInfo);
+    storeCities();
     weatherConditions(cityInfo);
   }).catch(function (error) {
-    if (error.status===404){
-    alert(`uh-oh! Looks like you formatted your city name incorrectly or that city does not exist. \n\n For example: \n ❤️ correct: new york,usa \n ✖️ incorrect: new york,ny`);
+    if (error.status === 404) {
+      alert(`uh-oh! Looks like you formatted your city name incorrectly or that city does not exist. \n\n For example: \n ❤️ correct: new york,usa \n ✖️ incorrect: new york,ny`);
     }
+    // if city name not found it alerts the user
   });
-
 });
-
-// function for displaying the weatherConditions after clicking to button
-$(document).on("click", ".btn-group", function (event) {
+// function for deleting city name from the list of stored cities
+$(document).on("click", ".smBtn", function (event) {
+  var coor = event.target.id;
+  var pos = parseInt(coor.slice(5));
+  cities.splice(pos,1);
+  storeCities();
+  drawCities();
+});
+// function calls the weather conditions after clicking on city name
+$(document).on("click", ".city_clk", function (event) {
   var coor = $(event.target).attr("data-name");
   var pos = coor.search(",");
   cityInfo.lat = coor.slice(0, pos);
   cityInfo.lon = coor.slice(pos + 1);
   cityInfo.name = $(event.target).text()
-
   weatherConditions(cityInfo);
 });
 
+// call the saved cities
+drawCities();

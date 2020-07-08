@@ -1,7 +1,5 @@
 # 06 Server-Side APIs: Weather Dashboard
 
-Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
-
 Use the [OpenWeather API](https://openweathermap.org/api) to retrieve weather data for cities. The documentation includes a section called "How to start" that will provide basic setup and usage instructions. Use `localStorage` to store any persistent data.
 
 ## User Story
@@ -30,17 +28,34 @@ WHEN I open the weather dashboard
 THEN I am presented with the last searched city forecast
 ```
 
-The following image demonstrates the application functionality:
+The following image demonstrates needed the application functionality:
 
-![weather dashboard demo](/assets/06-server-side-apis-homework-demo.png)
+![weather dashboard demo](/assets/06-server-side-homework-demo.png)
 
 ## Review
+![weather dashboard demo](/assets/presentation.gif)
+features presentation in 15 seconds
+![weather dashboard demo](/assets/1-Start-screen.png)
+Greeting screen with saved cities and input form
+![weather dashboard demo](/assets/2-alert-on-wrong-input.png)
+In case input cities was not found alert popsup 
+![weather dashboard demo](/assets/3-current-dashboard-with-background.png)
+Current weather dashboard look
+![weather dashboard demo](/assets/4-list-of-maps-used-switchto-Celsious.png)
+List of maps displayed from openweathermap API using leaflet API and openstreetmap tiles and switching to Celsious
+![weather dashboard demo](/assets/5-diffrent-city-click.png)
+You can choose diffrent city also it change background from rapidapi API
+![weather dashboard demo](/assets/6-temperature-layer-map&forecast.png)
+shows different map from default
+![weather dashboard demo](/assets/7-mobile-look.png)
+it adjust to mobile screen
+![weather dashboard demo](/assets/8-iPAD-look.png)
+or IPAD
+Submitted the following for review:
 
-You are required to submit the following for review:
+* The URL of the deployed application. https://sbolotnikov.github.io/weather-dashboard/
 
-* The URL of the deployed application.
-
-* The URL of the GitHub repository. Give the repository a unique name and include a README describing the project.
+* The URL of the GitHub repository. https://github.com/sbolotnikov/weather-dashboard
 
 - - -
 © 2019 Trilogy Education Services, a 2U, Inc. brand. All Rights Reserved.

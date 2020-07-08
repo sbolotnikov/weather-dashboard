@@ -36,26 +36,29 @@
                 <h1>Weather Dashboard</h1>
 
             </header>
-            <section>
-                <div class="row">
-                    <div class="col-3">
-                        <form id="city-form">
-                            <h5>Search for a city:</h5>
-                            <input type="text" id="city-input">
+            <section id="section">
+                <div class="row" id="bigPan">
+                    <div class="col-12 col-md-3">
+                        <div class="wrapper">
+                            <div id="formPanel">
+                                <form id="city-form">
+                                    <h5>Search for a city:</h5>
+                                    <input type="text" id="city-input">
 
-                            <!-- Button triggers new cities to be added -->
-                            <input id="add-city" type="submit" value=" " src="/assets/search-icon.png">
-                        </form>
-                        <div class="btn-group"></div>
+                                    <!-- Button triggers new cities to be added -->
+                                    <input id="add-city" type="submit" value=" " src="/assets/search-icon.png">
+                                </form>
+                                <div class="cities-group"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-9">
-                        <button id="system" onclick="changeSystem()">&degF</button>
+                    <div class="col-12 col-md-9" id="bigPan3" style="opacity: 0;">
                         <figure id="currentPan">
-
+                        <!-- information on current weather goes here -->
                         </figure>
-                        <h5>5-Day Forcast</h5>
+                        <h4 style="color: white; text-shadow: royalblue;">5-Day Forcast</h4>
                         <figure id="forPan">
-
+                          <!-- forcast information goes here -->
                         </figure>
 
                     </div>
