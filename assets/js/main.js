@@ -237,35 +237,35 @@ function weatherConditions(coord) {
     drawCities();
     // adding map
     ChangeMap(0, coord.lat, coord.lon);
+    let elM="";
 
     // displaying and arranging weather data in Farengeit and Celcious for 5 days ahead
     if ($("div.container").width() > 484) {
       el = `<div id="imp2">
       <div class="row justify-content-around" id="rowFor1">           
       `
-      let elM = `<div class="hidden" id="metr2">
+      elM = `<div class="hidden" id="metr2">
       <div class="row justify-content-around" id="rowFor2">               
       `
       for (var i = 1; i < 6; i++) {
         el +=
           ` <div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin:auto; border-radius: 5px">
-           <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
-           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage">
-           <p class="futureData">${response.daily[i].weather[0].main}</p>
-           <h6 class="futureData">High:${response.daily[i].temp.max.toFixed(0)}\xB0F</h6>
-           <h6 class="futureData">Low:${response.daily[i].temp.min.toFixed(0)}\xB0F</h6>      
-           <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
-          </div>`
+             <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
+             <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage">
+             <p class="futureData">${response.daily[i].weather[0].main}</p>
+             <h6 class="futureData">High:${response.daily[i].temp.max.toFixed(0)}\xB0F</h6>
+             <h6 class="futureData">Low:${response.daily[i].temp.min.toFixed(0)}\xB0F</h6>      
+             <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
+           </div>`
         elM +=
-          `<div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto; border-radius: 5px ">         
-           <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
-           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage ">
-           <p class="futureData">${response.daily[i].weather[0].main}</p>
-           <h6 class="futureData">High:${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</h6> 
-           <h6 class="futureData">Low:${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</h6>
-           <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
-          <div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto;">  
-          `
+          ` <div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto; border-radius: 5px ">         
+             <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
+             <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage ">
+             <p class="futureData">${response.daily[i].weather[0].main}</p>
+             <h6 class="futureData">High:${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</h6> 
+             <h6 class="futureData">Low:${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</h6>
+             <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
+            </div>`
       }
     }else{
       el = `<div id="imp2">
