@@ -159,30 +159,41 @@ function weatherConditions(coord) {
     $("#bigPan3").css("opacity", 1);
     // https://openweathermap.org/img/w/50d.png
     // '01d''01n','02d''02n''03d''03n''04d''04n'    '09d''09n'   '10d''10n'   '11d''11n'   '13d''13n'   '50d''50n' fog
-
-
-
     // if sucsessfull it find image for the background accordingly to current weather conditions from rapidapi API
-    var settings = {
-      "async": true,
-      "crossDomain": true,
-      "url": `https://bing-image-search1.p.rapidapi.com/images/search?q=${response.current.weather[0].description}`,
-      "method": "GET",
-      "headers": {
-        "x-rapidapi-host": "bing-image-search1.p.rapidapi.com",
-        "x-rapidapi-key": "dff8f3f117msh752eb83c0d81eb8p10add3jsn52664fe1c35d"
-      }
-    }
-
-    $.ajax(settings).done(function (response1) {
-      imgURL = response1.value[0].contentUrl;
+    
+    var weatherpicURL=`https://pixabay.com/api/?key=17409987-87acf859f9545b0f00c73cdd0&q=${response.current.weather[0].description}&image_type=photo&per_page=10`
+    $.ajax({
+      url: weatherpicURL,
+      method: "GET",
+    }).then(function (response1) {
+      imgURL = response1.hits[Math.floor(Math.random()*response1.hits.length)].largeImageURL;
       document.body.style.backgroundImage = `url("${imgURL}")`;
-      console.log(imgURL);
     }).catch(function (error) {
       // if error use default
       document.body.style.backgroundImage = `url("${imgURL}")`;
-    }
-    );
+    });
+    // another API
+    // var settings = {
+    //   "async": true,
+    //   "crossDomain": true,
+    //   "url": `https://bing-image-search1.p.rapidapi.com/images/search?q=${response.current.weather[0].description}`,
+    //   "method": "GET",
+    //   "headers": {
+    //     "x-rapidapi-host": "bing-image-search1.p.rapidapi.com",
+    //     "x-rapidapi-key": "dff8f3f117msh752eb83c0d81eb8p10add3jsn52664fe1c35d"
+    //   }
+    // }
+
+    // $.ajax(settings).done(function (response1) {
+    //   imgURL = response1.value[0].contentUrl;
+    //   document.body.style.backgroundImage = `url("${imgURL}")`;
+    //   console.log(imgURL);
+    // }).catch(function (error) {
+    //   // if error use default
+    //   document.body.style.backgroundImage = `url("${imgURL}")`;
+    // });
+
+
     // cloudy.jpg
     document.body.style.backgroundRepeat = "y-repeat";
     document.body.style.backgroundSize = "100%";
