@@ -4,7 +4,7 @@ var lon = 0;
 var lat = 0;
 var city = "New York,NY,USA";
 var cities = [];
-var imgURL='cloudy.jpg';
+var imgURL = 'cloudy.jpg';
 var cityInfo = {
   "name": "",
   "lat": 0,
@@ -173,9 +173,9 @@ function weatherConditions(coord) {
         "x-rapidapi-key": "dff8f3f117msh752eb83c0d81eb8p10add3jsn52664fe1c35d"
       }
     }
-    
+
     $.ajax(settings).done(function (response1) {
-      imgURL=response1.value[0].contentUrl;
+      imgURL = response1.value[0].contentUrl;
       document.body.style.backgroundImage = `url("${imgURL}")`;
       console.log(imgURL);
     }).catch(function (error) {
@@ -237,33 +237,70 @@ function weatherConditions(coord) {
     drawCities();
     // adding map
     ChangeMap(0, coord.lat, coord.lon);
-    el = `<div id="imp2">
-           <div class="row justify-content-around" id="rowFor1">           
-    `
-    let elM = `<div class="hidden" id="metr2">
-                <div class="row justify-content-around" id="rowFor2">               
-    `
+
     // displaying and arranging weather data in Farengeit and Celcious for 5 days ahead
-    for (var i = 1; i < 6; i++) {
-      el +=
-        ` <div class="col-4 col-md-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin:auto; border-radius: 5px">
+    if ($("div.container").width() > 484) {
+      el = `<div id="imp2">
+      <div class="row justify-content-around" id="rowFor1">           
+      `
+      let elM = `<div class="hidden" id="metr2">
+      <div class="row justify-content-around" id="rowFor2">               
+      `
+      for (var i = 1; i < 6; i++) {
+        el +=
+          ` <div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin:auto; border-radius: 5px">
            <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
-           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
+           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage">
            <p class="futureData">${response.daily[i].weather[0].main}</p>
            <h6 class="futureData">High:${response.daily[i].temp.max.toFixed(0)}\xB0F</h6>
            <h6 class="futureData">Low:${response.daily[i].temp.min.toFixed(0)}\xB0F</h6>      
            <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
           </div>`
-      elM +=
-        `
-          <div class="col-4 col-md-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto; border-radius: 5px">         
-           <p class="date">${moment().add(i, 'd').format('MM/DD/YYYY')}</p>
-           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage day 1">
+        elM +=
+          `<div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto; border-radius: 5px ">         
+           <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
+           <img class="cloudIcon" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage ">
            <p class="futureData">${response.daily[i].weather[0].main}</p>
            <h6 class="futureData">High:${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</h6> 
            <h6 class="futureData">Low:${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</h6>
            <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
-          </div>`
+          <div class="col-2" style="background-color:royalblue; color: whitesmoke; text-align: center; margin: auto;">  
+          `
+      }
+    }else{
+      el = `<div id="imp2">
+      <div class="row" id="rowFor1" style="background-color:royalblue; color: whitesmoke; text-align: left; margin:auto;" >           
+      `
+      elM = `<div class="hidden" id="metr2">
+      <div class="row" id="rowFor2" style="background-color:royalblue; color: whitesmoke; text-align: left; margin:auto">               
+      `
+      for (var i = 1; i < 6; i++) {
+        el +=
+          ` 
+            <div class="col-6" style="text-align: left">
+              <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>   
+              <h6 class="futureData">High:${response.daily[i].temp.max.toFixed(0)}\xB0F</h6>
+              <h6 class="futureData">Low:${response.daily[i].temp.min.toFixed(0)}\xB0F</h6>      
+              <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
+            </div>
+            <div class="col-6" style="text-align: right" >
+             <p class="futureData">${response.daily[i].weather[0].main}</p>
+             <img class="cloudIcon" style="float:right" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage">
+          </div>
+          `
+        elM +=
+          ` 
+           <div class="col-6" style="text-align: left" >
+             <p class="date">${moment().add(i, 'd').format('MMM DD')}</p>
+             <h6 class="futureData">High:${Math.round((response.daily[i].temp.max - 32) * 5 / 9)}\xB0C</h6> 
+             <h6 class="futureData">Low:${Math.round((response.daily[i].temp.min - 32) * 5 / 9)}\xB0C</h6>
+             <p class="futureData">Humid. ${response.daily[i].humidity}%</p>
+          </div>  
+          <div class="col-6" style="text-align: right">
+            <p class="futureData">${response.daily[i].weather[0].main}</p>
+            <img class="cloudIcon" style="float:right" src="https://openweathermap.org/img/w/${response.daily[i].weather[0].icon}.png" alt="Cloud coverage">
+          </div> `
+      }
     }
     el += "</div> </div>";
     $currentEl = document.createElement('div');
@@ -271,9 +308,9 @@ function weatherConditions(coord) {
     // $currentEl = $currentEl.firstElementChild;
     $("#forPan").empty();
     $("#forPan").append($currentEl);
-    el += "</div> </div>";
+    elM += "</div> </div>";
     $currentEl = document.createElement('div');
-    $currentEl.innerHTML = elM;    
+    $currentEl.innerHTML = elM;
     $("#forPan").append($currentEl)
   });
 };
@@ -313,7 +350,7 @@ $("#add-city").on("click", function (event) {
 $(document).on("click", ".smBtn", function (event) {
   var coor = event.target.id;
   var pos = parseInt(coor.slice(5));
-  cities.splice(pos,1);
+  cities.splice(pos, 1);
   storeCities();
   drawCities();
 });
