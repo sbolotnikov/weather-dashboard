@@ -6,7 +6,7 @@
   "background_color": "#fff",
   "display": "fullscreen",
   "scope": "/",
-  "start_url": "/index.html",
+  "start_url": "/weather-dashboard",
 
   "icons": [
       { "src":"favicon-16x16.png",
