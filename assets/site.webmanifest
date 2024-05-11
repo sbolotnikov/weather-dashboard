@@ -4,8 +4,8 @@
     "description": "This weather App getting outlook for  current and upcomming weather in multiple cities. Cities is added to the search history(in LocalStorage). It uses OpenWeather API to retrieve weather data: city name, the date, an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index.",
   "theme_color": "#fff",
   "background_color": "#fff",
-  "display": "fullscreen",
-  "scope": "/",
+  "display": "standalone",
+  "scope": "/weather-dashboard",
   "start_url": "/weather-dashboard",
 
   "icons": [
